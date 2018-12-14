@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<a href="/groups" class="float-right">Dashboard</a>
+<a href="<%="/sessions/#{@user.id}"%>" data-method="delete" class="float-right">Log Out</a>
+<div class="container">
+  <h4><%= @group.name %></h4>
+  <% if @member == true %>
+  <form class="" action="<%="/groups/#{@group.id}/members"%>" method="post">
+    <input type="hidden" value="delete" name="_method">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <button type="submit" name="button">Leave Group</button>
+  </form>
+  <% else %>
+  <form class="" action="<%="/groups/#{@group.id}/members"%>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <button type="submit" name="button">Join Group</button>
+  </form>
+  <% end %>
+  <p><%=@group.description%></p>
+  <% if @owner == true %>
+  <p>Created By: YOU</p>
+  <% else %>
+  <p>Created By: <%=@owner.first_name %> <%=@owner.last_name%></p>
+  <% end %>
+  <p>Members:</p>
+  <% @users.each do |member| %>
+  <p><%=member.first_name%> <%=member.last_name%></p>
+  <% end %>
+</div>

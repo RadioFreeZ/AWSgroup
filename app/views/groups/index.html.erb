@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<div class="container">
+  <a href="<%="/sessions/#{@user.id}"%>" data-method="delete" class="float-right">Log Out</a>
+  <div class="row">
+    <div class="col-m-6 mr-5">
+      <h3>Hi <%=@user.first_name%> <%=@user.last_name%></h3>
+      <h4 class="mb-5">Here are the organizations you may join:</h4>
+      <% @groups.each do |group| %>
+        <a href="<%="/groups/#{group.id}"%>"><%=group.name%></a>
+        <p class="ml-3">Members: <%= Membership.where(group_id:group.id).count %> </p>
+        <p class="ml-3"><%=group.description%></p>
+        <% if @user.id == group.owner %>
+          <p><a href="<%="/groups/#{group.id}"%>" data-method="delete" class="ml-3">Delete</a></p>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-m-6">
+      <p>Create a new organization:</p>
+      <% if flash[:errors] %>
+        <% flash[:errors].each do |e| %>
+          <%= e %>
+        <% end %>
+      <% end %>
+      <form class="form-group" action="/groups" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <label for="">Org Name:</label>
+        <input type="text" name="name" value="" class="form-control">
+        <label for="">Description:</label>
+        <input type="text" name="description" value="" class="form-control">
+        <button type="submit" name="button" class="btn btn-primary">Create</button>
+      </form>
+    </div>
+  </div>
+</div>
